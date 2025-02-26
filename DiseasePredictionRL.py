@@ -37,10 +37,10 @@ def self_learning_prediction(symptom_vector, correct_disease= None):
         return predicted_disease
 
 #Running the self_learning Ai
-sample_symptom_vector= np.random.rand(model.input_shape[1])#random test vector
+'''sample_symptom_vector= np.random.rand(model.input_shape[1])#random test vector
 
 predicted_disease= self_learning_prediction(sample_symptom_vector)
 print(f"Predicted Disease: {predicted_disease}")
 
 true_disease= "Malaria"
-self_learning_prediction(sample_symptom_vector, correct_disease= true_disease)
+self_learning_prediction(sample_symptom_vector, correct_disease= true_disease)'''
