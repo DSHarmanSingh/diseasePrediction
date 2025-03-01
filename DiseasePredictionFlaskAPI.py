@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import  CORS
 import numpy as  np
-import tersorflow as tf
+import tensorflow as tf
 import joblib
 from pymongo import MongoClient
 
@@ -34,4 +34,6 @@ def predict():
     predicted_disease= label_encoder.inverse_transfrom([predicted_label])[0]
     return jsonify({"predicted_disease": predicted_disease})
 
-if __name__ == '__main__': app.run(debug= True, host= '0.0.0.0')
+if __name__ == '__main__':
+    port= int(os.environ.get("PORT", 10000))
+    app.run(debug= True, host= '0.0.0.0', port= port)
