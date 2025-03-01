@@ -4,7 +4,7 @@ import joblib
 from tensorflow.keras.models import load_model
 #Loading model and label encoding for decoding predictions
 model= load_model("DiseasePrediction_DeepLearning.h5")
-label_encoder= joblib.load("LabelEncoder.pkl")
+label_encoder= joblib.load("DiseasePrediction_LabelEncoder.pkl")
 
 diseases= label_encoder.classes_
 Q_table = {disease: 0 for disease in diseases}
