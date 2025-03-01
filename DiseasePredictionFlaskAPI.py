@@ -19,7 +19,7 @@ feedback_collection= db["user_feedback"]
 app= Flask(__name__)
 CORS(app)
 
-@app.route('/')
+@app.route("/")
 def home():
     return "Welcome to AI-Powered Healthcare API!"
 
@@ -34,4 +34,7 @@ def predict():
     predicted_disease= label_encoder.inverse_transfrom([predicted_label])[0]
     return jsonify({"predicted_disease": predicted_disease})
 
-if __name__ == '__main__': app.run(debug= True, host= '0.0.0.0')
+if __name__ == '__main__':
+    port= int(os.environ.get("PORT", 10000))
+    app.run(debug= True, host= '0.0.0.0', port= port)
+    )
