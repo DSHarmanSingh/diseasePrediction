@@ -35,5 +35,5 @@ test_loss, test_acc= model.evaluate(X_test, y_test)
 print(f" Model Accuracy: {test_acc:.4f}")
 
 #Save the trained model
-model.save("DiseasePrediction_DeepLearning.h5")
-print("Model saved as 'DiseasePrediction_DeepLearning.h5'")
+model.save("DiseasePrediction_DeepLearning.keras")
+print("Model saved as 'DiseasePrediction_DeepLearning.keras'")
