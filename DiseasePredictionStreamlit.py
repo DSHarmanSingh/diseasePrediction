@@ -1,7 +1,8 @@
 import streamlit as st
 import requests
 
-API_URL = "https://ddsystem.onrender.com"  # Change if deployed
+# Replace with your actual API URL
+API_URL = "https://ddsystem.onrender.com/predict"
 
 st.title("🩺 AI-Powered Self-Learning Medical Assistant")
 
