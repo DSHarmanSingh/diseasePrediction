@@ -1,22 +1,34 @@
 import streamlit as st
-import numpy as np
-import tensorflow as tf
-import joblib
+import requests  # To send requests to the Flask API
 
-# Load trained deep learning model & label encoder
-model = tf.keras.models.load_model("DiseasePrediction_DeepLearning.h5")
-label_encoder = joblib.load("LabelEncoder.pkl")
-tfidf= joblib.load("tfidf.pkl")
+# Flask API URL (Change this to your deployed API URL)
+FLASK_API_URL = "https://ddsystem.onrender.com" 
+# FLASK_API_URL = "https://your-flask-api.onrender.com/predict"  # If deployed on Render
 
+# Streamlit UI
 st.title("🩺 AI-Powered Self-Learning Medical Assistant")
+st.write("Enter symptoms separated by spaces and get an AI-powered disease prediction.")
 
-# User symptom input
-user_input = st.text_area("Enter symptoms (comma-separated):")
+# User input
+user_input = st.text_area("Enter symptoms (separated by spaces):")
 
 if st.button("Predict Disease"):
-    symptoms_vector = np.random.rand(model.input_shape[1])  # Replace with real vector
-    prediction = model.predict(symptoms_vector.reshape(1, -1))
-    predicted_label = np.argmax(prediction)
-    predicted_disease = label_encoder.inverse_transform([predicted_label])[0]
+    if user_input.strip():  # Ensure input is not empty
+        # Prepare request payload
+        payload = {"symptoms": user_input}
 
-    st.success(f"Predicted Disease: **{predicted_disease}**")
+        try:
+            # Send POST request to Flask API
+            response = requests.post(FLASK_API_URL, json=payload)
+            result = response.json()  # Get JSON response
+
+            # Display result
+            if "predicted_disease" in result:
+                st.success(f"🦠 Predicted Disease: **{result['predicted_disease']}**")
+            else:
+                st.error("⚠️ Error: Unexpected response from API.")
+        except Exception as e:
+            st.error(f"🚨 API Request Failed: {e}")
+    else:
+        st.warning("⚠️ Please enter symptoms before predicting.")
+
