@@ -12,9 +12,9 @@ import joblib
 from pymongo import MongoClient
 
 #Load trained deep learning model $ label encoder
-model= tf.keras.models.load_model("DiseasePrediction_DeepLearning.keras")
-label_encoder= joblib.load("DiseasePrediction_LabelEncoder.pkl")
-tfidf= joblib.load("DiseasePrediction_tfidf.pkl")
+model= tf.keras.models.load_model("DiseasePrediction_DeepLearning.h5")
+label_encoder= joblib.load("LabelEncoder.pkl")
+tfidf= joblib.load("tfidf.pkl")
 
 #Connect with MongoDB
 #client= MongoClient("")
