@@ -1,33 +1,41 @@
+import numpy as np
+import joblib
+import tensorflow.lite as tflite
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import numpy as np
-import tensorflow as tf
-import joblib
-model = tf.keras.models.load_model("DiseasePrediction_DeepLearning.tflite")
+from pymongo import MongoClient
+
+# Load Label Encoder & TF-IDF Vectorizer
 label_encoder = joblib.load("LabelEncoder.pkl")
 tfidf = joblib.load("tfidf.pkl")
+
+# Load TF-Lite Model
+interpreter = tflite.Interpreter(model_path="DiseasePrediction_DeepLearning.tflite")
+interpreter.allocate_tensors()
+input_details = interpreter.get_input_details()
+output_details = interpreter.get_output_details()
+
 app = Flask(__name__)
 CORS(app)
 
 @app.route('/')
 def home():
     return "Welcome to AI-Powered Healthcare API!"
-# Load models
-
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    data = request.get_json()
-    
-    if not data or 'symptoms' not in data:
-        return jsonify({"error": "No symptoms provided"}), 400
+    data = request.json
+    symptoms_text = data['symptoms']
 
-    symptoms_text = data['symptoms'].strip()
-    if not symptoms_text:
-        return jsonify({"error": "Empty symptoms received"}), 400
+    # Convert symptoms to TF-IDF vector
+    symptoms_vector = tfidf.transform([symptoms_text]).toarray().astype(np.float32)
 
-    symptoms_vector = tfidf.transform([symptoms_text]).toarray()
-    prediction = model.predict(symptoms_vector)
+    # Run TF-Lite model
+    interpreter.set_tensor(input_details[0]['index'], symptoms_vector)
+    interpreter.invoke()
+    prediction = interpreter.get_tensor(output_details[0]['index'])
+
+    # Get the predicted disease
     predicted_label = np.argmax(prediction)
     predicted_disease = label_encoder.inverse_transform([predicted_label])[0]
 
