@@ -3,7 +3,7 @@ from flask_cors import CORS
 import numpy as np
 import tensorflow as tf
 import joblib
-model = tf.keras.models.load_model("DiseasePrediction_DeepLearning.h5")
+model = tf.keras.models.load_model("DiseasePrediction_DeepLearning.tflite")
 label_encoder = joblib.load("LabelEncoder.pkl")
 tfidf = joblib.load("tfidf.pkl")
 app = Flask(__name__)
