@@ -1,6 +1,6 @@
 import os
 
-if os.path.exists("DiseasePrediction_DeepLearning.h5"):
+if os.path.exists("DiseasePrediction_DeepLearning.keras"):
     print("Model file found")
 else:
     print("Model file is missing")
@@ -12,7 +12,7 @@ import joblib
 from pymongo import MongoClient
 
 #Load trained deep learning model $ label encoder
-model= tf.keras.models.load_model("DiseasePrediction_DeepLearning.h5")
+model= tf.keras.models.load_model("DiseasePrediction_DeepLearning.keras")
 label_encoder= joblib.load("DiseasePrediction_LabelEncoder.pkl")
 tfidf= joblib.load("DiseasePrediction_tfidf.pkl")
 
