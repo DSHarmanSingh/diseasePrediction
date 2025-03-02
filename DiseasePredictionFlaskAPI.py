@@ -3,14 +3,17 @@ from flask_cors import CORS
 import numpy as np
 import tensorflow as tf
 import joblib
-
-app = Flask(__name__)
-CORS(app)
-
-# Load models
 model = tf.keras.models.load_model("DiseasePrediction_DeepLearning.h5")
 label_encoder = joblib.load("LabelEncoder.pkl")
 tfidf = joblib.load("tfidf.pkl")
+app = Flask(__name__)
+CORS(app)
+
+@app.route('/')
+def home():
+    return "Welcome to AI-Powered Healthcare API!"
+# Load models
+
 
 @app.route('/predict', methods=['POST'])
 def predict():
