@@ -1,4 +1,9 @@
 import os
+
+if os.path.exists("DiseasePrediction_DeepLearning.h5"):
+    print("Model file found")
+else:
+    print("Model file is missing")
 from flask import Flask, request, jsonify
 from flask_cors import  CORS
 import numpy as  np
