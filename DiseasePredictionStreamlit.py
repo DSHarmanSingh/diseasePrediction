@@ -1,34 +1,22 @@
 import streamlit as st
-import requests  # To send requests to the Flask API
+import requests
 
-# Flask API URL (Change this to your deployed API URL)
-FLASK_API_URL = "https://ddsystem.onrender.com" 
-# FLASK_API_URL = "https://your-flask-api.onrender.com/predict"  # If deployed on Render
+API_URL = "https://ddsystem.onrender.com"  # Change if deployed
 
-# Streamlit UI
 st.title("🩺 AI-Powered Self-Learning Medical Assistant")
-st.write("Enter symptoms separated by spaces and get an AI-powered disease prediction.")
 
-# User input
-user_input = st.text_area("Enter symptoms (separated by spaces):")
+user_input = st.text_input("Enter symptoms (separated by spaces):")
 
 if st.button("Predict Disease"):
-    if user_input.strip():  # Ensure input is not empty
-        # Prepare request payload
-        payload = {"symptoms": user_input}
-
-        try:
-            # Send POST request to Flask API
-            response = requests.post(FLASK_API_URL, json=payload)
-            result = response.json()  # Get JSON response
-
-            # Display result
-            if "predicted_disease" in result:
-                st.success(f"🦠 Predicted Disease: **{result['predicted_disease']}**")
-            else:
-                st.error("⚠️ Error: Unexpected response from API.")
-        except Exception as e:
-            st.error(f"🚨 API Request Failed: {e}")
+    if not user_input.strip():
+        st.error("Please enter symptoms before predicting.")
     else:
-        st.warning("⚠️ Please enter symptoms before predicting.")
-
+        try:
+            response = requests.post(API_URL, json={"symptoms": user_input})
+            if response.status_code == 200:
+                result = response.json()
+                st.success(f"Predicted Disease: **{result.get('predicted_disease', 'Unknown')}**")
+            else:
+                st.error(f"API Error: {response.status_code} - {response.text}")
+        except Exception as e:
+            st.error(f"Request failed: {e}")
